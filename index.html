@@ -2,25 +2,56 @@
 <html lang="en">
 
 <head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>We’re Not Really Strangers - Local Play</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div id="game-container">
         <h1>We’re Not Really Strangers</h1>
-        <p id="player-turn">Player 1's Turn</p>
-        <div id="card">
+
+        <!-- Expansion Pack Selection -->
+        <div id="expansion-packs">
+            <h2>Select Expansion Packs</h2>
+            <div class="pack-options">
+                <label class="checkbox-container">Couples Edition
+                    <input type="checkbox" id="couples-pack">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="checkbox-container">Friendship Edition
+                    <input type="checkbox" id="friendship-pack">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="checkbox-container">Workplace Edition
+                    <input type="checkbox" id="workplace-pack">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="checkbox-container">Family Edition
+                    <input type="checkbox" id="family-pack">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <button id="start-btn" class="start-button">Start Game</button>
+        </div>
+
+        <!-- Main Game UI (Hidden until game starts) -->
+        <p id="player-turn" style="display:none;">Player 1's Turn</p>
+        <div id="card" style="display:none;">
             <p id="question-text">Get ready to start the game!</p>
         </div>
-        <button id="next-btn">Next Question</button>
-        <button id="wildcard-btn">Draw a Wildcard</button>
-        <p id="level-indicator">Level 1</p>
+        <button id="next-btn" style="display:none;">Next Question</button>
+        <button id="wildcard-btn" style="display:none;">Draw a Wildcard</button>
+        <button id="skip-btn" style="display:none;">Skip to Next Level</button>
+        <p id="level-indicator" style="display:none;">Level 1</p>
+        <p id="remaining-cards" style="display:none;">Remaining cards in this level: 0</p>
+
+        <!-- Restart button (hidden until the end of the game) -->
+        <button id="restart-btn" class="start-button" style="display:none;">Restart Game</button>
     </div>
 
-    <script src="game.js"></script>
+    <script src="scripts.js"></script>
 </body>
 
 </html>

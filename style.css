@@ -1,21 +1,119 @@
-/* styles.css */
+/* Global styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    text-align: center;
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
     margin: 0;
     padding: 0;
-}
-
-#game-container {
-    margin-top: 50px;
+    text-align: center;
 }
 
 h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    margin: 20px 0;
+    color: #333;
 }
 
+h2 {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+#game-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 50px;
+}
+
+.start-button,
+#next-btn,
+#wildcard-btn,
+#skip-btn,
+#restart-btn {
+    padding: 15px 30px;
+    background-color: #ff6767;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.start-button:hover,
+#next-btn:hover,
+#wildcard-btn:hover,
+#skip-btn:hover,
+#restart-btn:hover {
+    background-color: #ff4040;
+}
+
+/* Checkbox styling */
+.pack-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    user-select: none;
+    color: #333;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #ccc;
+    border-radius: 5px;
+}
+
+.checkbox-container input:checked~.checkmark {
+    background-color: #ff6767;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked~.checkmark:after {
+    display: block;
+}
+
+.checkbox-container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+/* Main Game UI styling (after the game starts) */
 #card {
     width: 500px;
     height: 300px;
@@ -34,32 +132,10 @@ h1 {
     color: #333;
 }
 
-#next-btn,
-#wildcard-btn {
-    margin-top: 20px;
-    padding: 10px 30px;
-    font-size: 1em;
-    background-color: #ff6767;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#next-btn:hover,
-#wildcard-btn:hover {
-    background-color: #ff4040;
-}
-
-#player-turn {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    color: #666;
-}
-
-#level-indicator {
+#player-turn,
+#level-indicator,
+#remaining-cards {
     margin-top: 10px;
-    font-size: 1.2em;
-    color: #888;
+    font-size: 1.2rem;
+    color: #666;
 }

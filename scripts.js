@@ -1,6 +1,4 @@
-// game.js
 
-// Questions categorized by levels
 const questions = {
     level1: [
         "What do you think my major is?",
@@ -112,20 +110,127 @@ const questions = {
     ]
 };
 
+// Expansion packs
+const expansionPacks = {
+    couples: [
+        "What do you think will be perfect for your wedding?",
+        "What would make you feel closer to me?",
+        "Is there any time you want to leave me?",
+        "How many children do you want?",
+        "What can we create together?",
+        "Do you think I am still a virgin?",
+        "What's the most attractive quality about me that isn't physical?",
+        "What is the story about you that I cannot miss?",
+        "What do you think my perfect date night would be?",
+        "Do you think I have never been in a relationship?"
+    ],
+    friendship: [
+        "What do you think my weakness is?",
+        "What do you think my strength is?",
+        "What do you think I should know about myself that perhaps I'm unaware of?",
+        "How do our personalities complement each other?",
+        "What do you admire most about me?",
+        "In one word, describe how you feel right now!",
+        "What answer of mine made you light up?",
+        "Can I trust you to say something private?",
+        "What are you overthinking right now?",
+        "Do you think I am a good kisser?"
+    ],
+    workplace: [
+        "What's one professional accomplishment you're most proud of, and why?",
+        "Share a time when you faced a significant challenge at work and how you overcame it.",
+        "What is a skill or strength you possess that you feel is underutilized in your current role?",
+        "Reflecting on your career, what has been the most valuable lesson you've learned so far?",
+        "Describe a work-related goal or aspiration you have for the future.",
+        "Share a mentor or colleague who has had a significant impact on your professional growth, and why.",
+        "How do you handle work-life balance and maintain well-being in a demanding work environment?",
+        "What is one thing you believe your teammates or colleagues don't know about you?",
+        "Describe a moment when you felt a strong sense of teamwork or collaboration in your workplace.",
+        "Reflecting on your current job, what is the most rewarding aspect of your work?"
+    ],
+    family: [
+        "What are you most excited about today?",
+        "What is the most fun you've ever had?",
+        "What is the saddest story you've ever heard?",
+        "What have you wanted to tell me for a long time?",
+        "What takes you so long to tell me the truth?",
+        "Do you think I am the person you can talk to?",
+        "What activities do you wish to do with me?",
+        "What's the most unexplainable thing that's ever happened to you?",
+        "What is your day like?",
+        "When do you think is the best time to talk about what happened to you?"
+    ]
+};
+
+
 let currentLevel = 1;
 let currentIndex = 0;
 let currentPlayer = 1;
+let shuffledQuestions = {};
+
+// Function to shuffle an array using the Fisher-Yates algorithm
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Start game function, includes expansion pack selections
+function startGame() {
+    let selectedQuestions = {
+        level1: [...questions.level1],
+        level2: [...questions.level2],
+        level3: [...questions.level3]
+    };
+
+    // Check if expansion packs are selected
+    if (document.getElementById("couples-pack").checked) {
+        selectedQuestions.level2 = selectedQuestions.level2.concat(expansionPacks.couples);
+    }
+    if (document.getElementById("friendship-pack").checked) {
+        selectedQuestions.level2 = selectedQuestions.level2.concat(expansionPacks.friendship);
+    }
+    if (document.getElementById("workplace-pack").checked) {
+        selectedQuestions.level3 = selectedQuestions.level3.concat(expansionPacks.workplace);
+    }
+    if (document.getElementById("family-pack").checked) {
+        selectedQuestions.level3 = selectedQuestions.level3.concat(expansionPacks.family);
+    }
+
+    // Shuffle the questions
+    shuffledQuestions.level1 = shuffleArray(selectedQuestions.level1);
+    shuffledQuestions.level2 = shuffleArray(selectedQuestions.level2);
+    shuffledQuestions.level3 = shuffleArray(selectedQuestions.level3);
+
+    // Hide the expansion pack selection and show the game interface
+    document.getElementById('expansion-packs').style.display = 'none';
+    document.getElementById('player-turn').style.display = 'block';
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('next-btn').style.display = 'inline-block';
+    document.getElementById('wildcard-btn').style.display = 'inline-block';
+    document.getElementById('skip-btn').style.display = 'inline-block';
+    document.getElementById('level-indicator').style.display = 'block';
+    document.getElementById('remaining-cards').style.display = 'block';
+
+    // Initialize game state
+    currentLevel = 1;
+    currentIndex = 0;
+    currentPlayer = 1;
+    updateGameState();
+}
 
 // Function to get the next question based on the level
 function getNextQuestion() {
     let questionList;
 
     if (currentLevel === 1) {
-        questionList = questions.level1;
+        questionList = shuffledQuestions.level1;
     } else if (currentLevel === 2) {
-        questionList = questions.level2;
+        questionList = shuffledQuestions.level2;
     } else if (currentLevel === 3) {
-        questionList = questions.level3;
+        questionList = shuffledQuestions.level3;
     }
 
     if (currentIndex < questionList.length) {
@@ -137,6 +242,85 @@ function getNextQuestion() {
         if (currentLevel <= 3) {
             return getNextQuestion();  // Get the first question of the next level
         } else {
+            // Game is over, show restart button
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('wildcard-btn').style.display = 'none';
+            document.getElementById('skip-btn').style.display = 'none';
+            document.getElementById('restart-btn').style.display = 'inline-block';
             return "Game over! You’ve completed all levels.";
         }
+    }
+}
 
+// Function to update the game state
+function updateGameState() {
+    const question = getNextQuestion();
+    document.getElementById("question-text").textContent = question;
+    document.getElementById("player-turn").textContent = `Player ${currentPlayer}'s Turn`;
+
+    // Update level indicator and number of cards remaining
+    document.getElementById("level-indicator").textContent = `Level ${currentLevel}`;
+    let remainingCards;
+    if (currentLevel === 1) {
+        remainingCards = shuffledQuestions.level1.length - currentIndex;
+    } else if (currentLevel === 2) {
+        remainingCards = shuffledQuestions.level2.length - currentIndex;
+    } else if (currentLevel === 3) {
+        remainingCards = shuffledQuestions.level3.length - currentIndex;
+    }
+    document.getElementById("remaining-cards").textContent = `Remaining cards in this level: ${remainingCards}`;
+
+    // Alternate the players
+    currentPlayer = currentPlayer === 1 ? 2 : 1;
+}
+
+// Skip to the next level
+function skipToNextLevel() {
+    currentLevel++;
+    currentIndex = 0;
+
+    // Update game state if there are more levels to play
+    if (currentLevel <= 3) {
+        updateGameState();
+    } else {
+        document.getElementById('next-btn').style.display = 'none';
+        document.getElementById('wildcard-btn').style.display = 'none';
+        document.getElementById('skip-btn').style.display = 'none';
+        document.getElementById('restart-btn').style.display = 'inline-block';
+        document.getElementById("question-text").textContent = "Game over! You’ve completed all levels.";
+    }
+}
+
+// Restart the game
+function restartGame() {
+    // Reset game state
+    document.getElementById('restart-btn').style.display = 'none';
+    document.getElementById('expansion-packs').style.display = 'block';
+
+    // Hide game UI
+    document.getElementById('player-turn').style.display = 'none';
+    document.getElementById('card').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('wildcard-btn').style.display = 'none';
+    document.getElementById('skip-btn').style.display = 'none';
+    document.getElementById('level-indicator').style.display = 'none';
+    document.getElementById('remaining-cards').style.display = 'none';
+}
+
+// Event listener for "Next Question" button
+document.getElementById('next-btn').addEventListener('click', updateGameState);
+
+// Event listener for "Draw a Wildcard" button
+document.getElementById('wildcard-btn').addEventListener('click', function () {
+    const wildcard = questions.wildcards[Math.floor(Math.random() * questions.wildcards.length)];
+    document.getElementById("question-text").textContent = wildcard;
+});
+
+// Event listener for "Start Game" button
+document.getElementById('start-btn').addEventListener('click', startGame);
+
+// Event listener for "Skip to Next Level" button
+document.getElementById('skip-btn').addEventListener('click', skipToNextLevel);
+
+// Event listener for "Restart Game" button
+document.getElementById('restart-btn').addEventListener('click', restartGame);
